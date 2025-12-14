@@ -1,0 +1,14 @@
+## Day 1 – Hardware Baseline Verification
+
+- Board: Arduino UNO R4 WiFi
+- Connection: USB (Serial)
+- Port: COM3
+- Baud rate: 115200
+- Heartbeat interval: ~10 seconds
+- Output: Sequential heartbeat counter printed to Serial Monitor
+
+Result:
+Baseline heartbeat generation is stable and reliable. This confirms hardware readiness for networked heartbeat transmission.
+
+Next step:
+Transmit heartbeat over Wi-Fi via a controlled network (phone hotspot) and begin logging on the laptop.
