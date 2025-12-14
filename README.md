@@ -1,24 +1,43 @@
 # silent-failure-detection
-Heartbeat-based monitoring project analysing silent failures (missing/delayed telemetry) using Arduino UNO R4 WiFi + Python log analysis.
 
-# Silent Failure Detection in Monitoring Systems
+Heartbeat-based monitoring project analysing silent failures (missing or delayed telemetry) using Arduino UNO R4 WiFi and Python-based log analysis.
 
-This project explores how **silent failures** (missing or delayed heartbeat signals) can be detected and analysed using a heartbeat monitoring pipeline.
+## Silent Failure Detection in Monitoring Systems
+
+This project explores how silent failures (missing or delayed heartbeat signals) can be detected and analysed using a heartbeat monitoring pipeline.
+
+---
 
 ## Why this matters
-In real monitoring environments, systems don’t always fail loudly. Devices may stop checking in, telemetry may drop, or messages may be delayed, creating blind spots for detection and investigation. This project measures that silence and analyses its impact.
+
+In real monitoring environments, systems do not always fail loudly. Devices may stop checking in, telemetry may drop, or messages may be delayed, creating blind spots for detection and investigation.
+
+This project focuses on measuring that silence and analysing its impact rather than relying on explicit error signals.
+
+---
 
 ## Current status
- Day 1 complete: baseline heartbeat generation verified via Serial Monitor (Arduino UNO R4 WiFi).
+
+- **Day 1:** Baseline heartbeat generation verified locally via Serial Monitor (Arduino UNO R4 WiFi).  
+- **Day 2:** UDP-based heartbeat transport implemented, backend listener added, silent failure detection and outage tracking validated through real Wi-Fi disconnect tests.
+
+Detailed implementation notes and observations are documented in the `docs/` directory.
+
+---
 
 ## Planned workflow
-1. Generate periodic heartbeat messages on Arduino UNO R4 WiFi  
-2. Transmit heartbeats over a controlled Wi-Fi network (phone hotspot)  
-3. Log received heartbeats on a Windows laptop  
-4. Analyse missing/delayed telemetry using Python (Jupyter)  
-5. Document findings from detection and forensic perspectives
 
-## Tools (planned)
-- Arduino UNO R4 WiFi, Arduino IDE
-- Python (pandas, matplotlib), Jupyter Notebook
-- Wireshark for network observation
+- Generate periodic heartbeat messages on Arduino UNO R4 WiFi  
+- Transmit heartbeats over a controlled Wi-Fi network (UDP)  
+- Log received heartbeats on a Windows laptop  
+- Detect missing or delayed telemetry using time-gap analysis  
+- Record outage start, recovery, and downtime duration  
+- Analyse findings from monitoring and forensic perspectives  
+
+---
+
+## Tools
+
+- Arduino UNO R4 WiFi, Arduino IDE  
+- Python (standard library, CSV logging; analysis planned with pandas and matplotlib)  
+- Wireshark for network observation and validation  

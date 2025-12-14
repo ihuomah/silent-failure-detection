@@ -1,0 +1,3 @@
+source_ip,downtime_start_utc,downtime_end_utc,downtime_seconds,notes
+20251214T193125Z_22b4a6b1,192.168.43.169,2025-12-14T19:42:40.371579+00:00,2025-12-14T19:54:04.422003+00:00,684.1,Recovered: heartbeat received
+20251214T193125Z_22b4a6b1,192.168.43.169,2025-12-14T19:54:51.596990+00:00,2025-12-14T19:56:31.435751+00:00,99.8,Recovered: heartbeat received

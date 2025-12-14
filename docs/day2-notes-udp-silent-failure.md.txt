@@ -1,0 +1,139 @@
+# Day 2 – UDP Heartbeat Transport & Silent Failure Detection
+
+## Context
+
+On Day 1, a local heartbeat mechanism was implemented and validated on the device using serial output only. This confirmed reliable heartbeat timing and counter logic without any network dependency.
+
+Day 2 extends this work by introducing **networked heartbeat transport** and **backend-based silent failure detection**.
+
+---
+
+## Problem
+
+Once heartbeat signals are transmitted over a network, failures may occur silently due to:
+
+- Wi-Fi disconnections
+- network isolation policies
+- device crashes
+- packet loss
+
+In such cases, no explicit error is sent, the backend simply stops receiving heartbeats.
+
+Without detection logic, these failures can remain unnoticed.
+
+---
+
+## Objective
+
+To design and test a backend system that:
+
+- receives heartbeats over UDP
+- detects missing heartbeats using time-based thresholds
+- identifies silent failures automatically
+- records outage start, recovery time, and downtime duration
+- produces evidence suitable for monitoring and forensic analysis
+
+---
+
+## Approach
+
+### 1. UDP Heartbeat Transport
+
+- Arduino sends heartbeats over UDP every **10 seconds**
+- Each message includes:
+  - heartbeat counter
+  - device uptime (milliseconds)
+- UDP was chosen for:
+  - low overhead
+  - simplicity
+  - absence of built-in reliability (forces backend detection logic)
+
+### 2. Backend Listener
+
+- Python service listens on UDP port **5005**
+- Heartbeats are logged to `heartbeats.csv` with:
+  - UTC timestamp
+  - source IP
+  - raw message
+
+### 3. Silent Failure Detection
+
+- Backend tracks the **last-seen timestamp** per device
+- A silent failure is flagged if:
+time_since_last_heartbeat > 30 seconds
+(approximately three missed heartbeats)
+
+### 4. Outage Tracking and Recovery
+
+- When a silent failure is detected:
+- an outage window is opened
+- When a heartbeat is received again:
+- the outage is closed
+- downtime duration is calculated
+- the event is logged to `outages.csv`
+
+### Downtime Calculation
+
+Downtime duration is calculated based on observed heartbeat telemetry rather than device-side state.
+
+- **Downtime start:** timestamp of the last successfully received heartbeat  
+- **Downtime end:** timestamp of the first heartbeat received after recovery  
+- **Downtime duration:** difference between downtime end and downtime start  
+
+This approach ensures downtime is measured using last-known-good communication and confirmed recovery, mirroring real-world monitoring systems.
+
+
+### 5. Real Network Testing
+
+Failures were induced by:
+
+- disconnecting the device from Wi-Fi
+- waiting beyond the detection threshold
+- reconnecting the device
+
+This simulates real-world connectivity loss rather than artificial failure injection.
+
+---
+
+## Results
+
+### Observed Behaviour
+
+- Heartbeats arrived consistently every ~10 seconds during normal operation
+- Upon Wi-Fi disconnection:
+- heartbeats stopped completely
+- a silent failure was detected after 30 seconds
+- Upon reconnection:
+- the first heartbeat triggered recovery
+- downtime was calculated automatically
+
+### Example Outage
+
+- **Downtime duration:** ~684 seconds (~11.4 minutes)
+- **Detection method:** heartbeat gap analysis
+- **Recovery trigger:** first heartbeat received after reconnection
+
+### Evidence
+
+- Backend console logs showing alert and recovery events
+- `heartbeats.csv` containing timestamped heartbeat gaps
+- `outages.csv` recording:
+- outage start time
+- outage end time
+- downtime duration
+- recovery reason
+
+---
+
+## Why this matters.
+
+This mirrors how real systems detect failures in:
+
+- SOC agent health monitoring
+- EDR heartbeat checks
+- IoT fleet management
+- VPN tunnel liveness monitoring
+- distributed service health checks
+
+The system does not rely on explicit error messages, only the **absence of communication**.
+
