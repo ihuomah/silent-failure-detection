@@ -1,0 +1,100 @@
+# Day 3 – Heartbeat Timing Analysis and Classification
+
+## Objective
+To transform raw heartbeat telemetry into structured analytical data that reveals silent failures, timing instability, and anomalous behaviour without relying on external monitoring platforms.
+
+---
+
+## Input Data
+- Source file: `data/raw/heartbeats.csv`
+- Contents include:
+  - Valid heartbeat messages (`HB,<seq>,<uptime_ms>`)
+  - Non-heartbeat messages (test traffic)
+  - Entries with malformed or non-standard timestamps
+
+---
+
+## Analysis Steps
+
+### 1. Heartbeat Parsing
+Valid heartbeat messages were identified by the `HB` prefix and parsed to extract:
+- Sequence number
+- Device uptime (milliseconds)
+
+Messages not matching the expected format were preserved and classified as anomalies rather than discarded.
+
+---
+
+### 2. Timing Interval Calculation
+For each valid heartbeat:
+- Inter-arrival time was calculated using the `received_utc` timestamp
+- Sequence deltas and uptime deltas were computed
+
+This allows detection of:
+- Network jitter
+- Delayed delivery
+- Missing telemetry
+- Device restarts
+
+---
+
+### 3. Silent Failure Detection
+A silence threshold of 30 seconds was applied.
+
+Any heartbeat gap exceeding this threshold was classified as a potential silent failure and recorded with:
+- Downtime start and end timestamps
+- Gap duration
+- Sequence jump size
+
+---
+
+### 4. Anomaly Classification
+The following anomaly categories were preserved for investigation:
+- NON_HB: Non-heartbeat messages
+- BAD_TIMESTAMP: Invalid or non-ISO timestamps
+- SEQ_GAP: Sequence jumps indicating missed heartbeats
+- SEQ_RESET: Negative sequence deltas indicating device restarts or resets
+
+Preserving these records avoids losing potentially critical forensic context.
+
+---
+
+## Outputs
+
+### `heartbeat_intervals.csv`
+Contains per-heartbeat timing and sequencing information:
+- `delta_seconds`
+- `seq_delta`
+- `uptime_delta_ms`
+
+Used for performance and reliability analysis.
+
+---
+
+### `outages_detected.csv`
+Contains detected silent failure windows:
+- Downtime start and end
+- Gap duration
+- Sequence jump size
+
+Used for incident reconstruction and availability analysis.
+
+---
+
+### `anomalous_messages.csv`
+Contains all malformed and unexpected messages with classification and reasoning.
+
+Used for:
+- Telemetry trust assessment
+- Device stability evaluation
+- Security and integrity analysis
+
+---
+
+## Real-World Relevance
+Modern monitoring systems often assume telemetry is trustworthy and continuous.  
+This analysis demonstrates how silence, timing drift, and malformed data can conceal outages, device failures, or loss of visibility.
+
+The approach mirrors early-stage processing performed inside SIEM and observability platforms, but makes the logic explicit and inspectable.
+
+This completes the analytical foundation required before introducing alerting, correlation, or security hardening.

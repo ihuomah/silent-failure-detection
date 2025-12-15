@@ -6,6 +6,8 @@ Heartbeat-based monitoring project analysing silent failures (missing or delayed
 
 This project explores how silent failures (missing or delayed heartbeat signals) can be detected and analysed using a heartbeat monitoring pipeline.
 
+The goal is not to replace existing monitoring platforms, but to make the underlying assumptions, failure modes, and detection logic explicit and inspectable.
+
 ---
 
 ## Why this matters
@@ -16,10 +18,13 @@ This project focuses on measuring that silence and analysing its impact rather t
 
 ---
 
-## Current status
 
-- **Day 1:** Baseline heartbeat generation verified locally via Serial Monitor (Arduino UNO R4 WiFi).  
+## Current status
+- **Day 1:** Baseline heartbeat generation verified locally via Serial Monitor (Arduino UNO R4 WiFi).
+
 - **Day 2:** UDP-based heartbeat transport implemented, backend listener added, silent failure detection and outage tracking validated through real Wi-Fi disconnect tests.
+
+- **Day 3:** Heartbeat timing analysis completed. Raw heartbeat logs were parsed to calculate inter-arrival intervals, sequence deltas, and uptime deltas. Silent failure windows were detected using time-gap thresholds, and malformed, non-heartbeat, and sequence-reset events were classified instead of discarded.
 
 Detailed implementation notes and observations are documented in the `docs/` directory.
 
