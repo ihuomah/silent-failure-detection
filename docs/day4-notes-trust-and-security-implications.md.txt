@@ -1,0 +1,93 @@
+# Day 4 – Trust and Security Implications
+
+## Purpose
+
+The purpose of Day 4 is to move beyond detection and analysis, and to examine what silent failures mean from a trust and security perspective.
+
+By this stage, the system is already capable of generating heartbeats, transporting them over a network, detecting outages, and classifying anomalous behaviour.
+Day 4 focuses on interpreting the consequences of these observations, particularly how loss of telemetry affects confidence, assurance, and decision-making in real environments.
+
+This stage does not attempt to prove that an attack occurred. Instead, it highlights what organisations lose the ability to know when telemetry becomes silent.
+
+---
+
+## Assumptions in Monitoring Systems
+
+Most monitoring systems operate on a set of implicit assumptions:
+
+- Telemetry is continuous unless an explicit failure is reported
+- If logs or heartbeats are present, the system is healthy
+- If telemetry resumes after an interruption, normal operation has been restored
+
+These assumptions are convenient, but fragile.
+
+The experiments conducted in this project show that telemetry can disappear quietly, without explicit errors or alerts. 
+During these silent periods, monitoring systems lose visibility into system behaviour, even though the system itself may still be powered, reachable, or partially operational.
+
+---
+
+## Loss of Observability and Trust
+
+The outages identified in `outages_detected.csv` represent more than downtime. 
+They represent periods where the organisation no longer has reliable evidence of what the system was doing.
+
+During an outage window:
+
+- Heartbeats are not received
+- Sequence continuity is broken
+- Logs are incomplete or absent
+- Monitoring tools cannot confirm system state
+
+As a result, trust in the telemetry is lost.
+
+Even after heartbeats resume, uncertainty remains. 
+Recovery restores functionality, but it does not automatically restore assurance. 
+There is no guarantee that the system state after recovery matches the state before the outage, or that no changes occurred during the silent window.
+
+From a security standpoint, this loss of trust is often more concerning than the outage itself.
+
+---
+
+## Security-Relevant Implications
+
+Silent outages create windows of ambiguity.
+
+These windows do not imply malicious activity, but they create conditions where malicious or unintended actions could occur without being observed. 
+During periods of silence:
+
+- Security monitoring cannot confirm that controls were enforced
+- Alerts dependent on telemetry may not trigger
+- Post-incident timelines become incomplete
+
+Importantly, these windows do not need to be long to matter. Short, intermittent outages can be sufficient to weaken confidence in monitoring and complicate investigations.
+
+The presence of sequence resets and timing gaps further reinforces this ambiguity. A negative sequence delta may indicate a reboot, firmware reload, or power interruption, but without continuous telemetry, intent cannot be determined.
+The result is uncertainty rather than evidence.
+
+---
+
+## Operational and Business Impact
+
+From an operational perspective, loss of observability affects how incidents are handled:
+
+- Incident response teams must assume worst-case scenarios
+- Additional time is spent validating system integrity
+- Decisions are delayed due to incomplete information
+
+From a business perspective, even brief periods of unobserved behaviour can carry risk. 
+For systems with online presence, telemetry gaps may coincide with service disruption, degraded customer experience, or exposure of sensitive operations without timely detection.
+
+Silent failures therefore impact not only availability, but also confidence in system reliability and security posture.
+
+---
+
+## What This Project Makes Visible
+
+This project does not aim to replace existing monitoring platforms. Instead, it makes explicit the logic that underpins them.
+
+By converting silence into measurable data, the system highlights when trust in telemetry is lost and for how long. 
+It provides a structured way to reason about uncertainty, rather than ignoring it or assuming recovery implies safety.
+
+The outcome of Day 4 is a clearer understanding that in monitoring and security, absence of data is itself meaningful, and must be treated as such.
+
+This interpretation forms the foundation for forensic reconstruction, security validation, and informed response in later stages of the project.

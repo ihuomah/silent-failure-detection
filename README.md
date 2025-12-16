@@ -26,6 +26,8 @@ This project focuses on measuring that silence and analysing its impact rather t
 
 - **Day 3:** Heartbeat timing analysis completed. Raw heartbeat logs were parsed to calculate inter-arrival intervals, sequence deltas, and uptime deltas. Silent failure windows were detected using time-gap thresholds, and malformed, non-heartbeat, and sequence-reset events were classified instead of discarded.
 
+- **Day 4:** Trust and security implications analysed. Silent outages were examined as periods of lost observability and assurance, highlighting how telemetry gaps affect security, incident response, and decision-making.
+
 Detailed implementation notes and observations are documented in the `docs/` directory.
 
 ---
