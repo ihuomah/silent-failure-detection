@@ -28,6 +28,8 @@ This project focuses on measuring that silence and analysing its impact rather t
 
 - **Day 4:** Trust and security implications analysed. Silent outages were examined as periods of lost observability and assurance, highlighting how telemetry gaps affect security, incident response, and decision-making.
 
+- **Day 5:** Forensic reconstruction completed. Outage events were reconstructed using evidence-based reasoning, explicitly separating facts, indicators, and unknowns to assess trust and integrity after silent telemetry loss.
+
 Detailed implementation notes and observations are documented in the [docs](docs/) directory.
 
 

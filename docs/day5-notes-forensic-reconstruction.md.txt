@@ -1,0 +1,54 @@
+# Day 5 – Forensic Reconstruction and Security Validation
+
+## Purpose
+Day 5 focuses on reconstructing outage events using available telemetry while explicitly separating evidence, indicators, and unknowns.
+The goal is not to attribute cause, but to constrain what can be reliably stated from the data.
+
+---
+
+## Evidence Available
+
+The following facts are from collected telemetry:
+- Source IP address
+- Downtime start and end timestamps
+- Duration of telemetry silence
+- Sequence number before outage
+- Sequence number after recovery
+- Sequence delta
+- Threshold breach confirmation
+
+These values form the factual basis for reconstruction.
+
+---
+
+## Reconstruction Summary
+During observed outage windows, telemetry from the monitored device ceased and later resumed. 
+Sequence continuity was broken, and in some cases sequence counters reset. 
+This confirms loss of observability and disruption of telemetry continuity.
+
+---
+
+## Indicators Observed
+- Extended silence exceeding defined thresholds
+- Negative sequence deltas indicating counter resets
+- Large sequence gaps suggesting missed heartbeats
+
+These indicators suggest possible causes but do not confirm intent or mechanism.
+
+---
+
+## Unknowns and Limitations
+With the current data, it is not possible to determine:
+- Whether the outage was caused by network failure, reboot, power loss, or attack
+- Whether system state changed during the silence window
+- Whether recovered telemetry reflects a trusted or altered state
+
+These unknowns are explicitly documented rather than assumed away.
+
+---
+
+## Security Implications
+Silent outages create periods where system behaviour cannot be verified. 
+Even after recovery, trust must be reassessed, as normal telemetry does not guarantee integrity.
+
+This reconstruction approach supports incident response, audit preparation, and risk assessment by preventing false certainty.
