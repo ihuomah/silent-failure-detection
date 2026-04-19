@@ -2,6 +2,9 @@
 
 Heartbeat-based monitoring project analysing silent failures (missing or delayed telemetry) using Arduino UNO R4 WiFi and Python-based log analysis.
 
+This project demonstrates how silent failures in monitoring systems can be detected, investigated, and analysed using a structured, SOC-style approach.
+
+
 ## Silent Failure Detection in Monitoring Systems
 
 This project explores how silent failures (missing or delayed heartbeat signals) can be detected and analysed using a heartbeat monitoring pipeline.
